@@ -21,6 +21,7 @@
 </head>
 
 <body class="bg-light">
+
     <div class="container">
         <div class="py-5 text-center">
             <h1 class="display-2" id="logo">Facturier</h1>
@@ -33,8 +34,9 @@
                 <form id="form">
                     <h4 class="mb-3">Type de document</h4>
                     <div class="row">
+
                         <div class="col-md-5 mb-3">
-                            <select class="custom-select d-block w-100" id="type" required autoComplete="nope">
+                            <select id="type" class="custom-select d-block w-100" required autoComplete="nope">
                                 <option value="invoice">Facture</option>
                                 <option value="estimate">Devis</option>
                             </select>
@@ -47,39 +49,39 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName">Prénom</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required
+                            <input id="firstName" type="text" class="form-control" placeholder="" value="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="lastName">Nom</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required
+                            <input id="lastName" type="text" class="form-control" placeholder="" value="" required
                                 autoComplete="nope">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="address">Addresse</label>
-                        <input type="text" class="form-control" id="address" placeholder="" required
+                        <input id="address" type="text" class="form-control" placeholder="" required
                             autoComplete="nope">
                     </div>
 
                     <div class="row">
                         <div class="col-md-5 mb-3">
                             <label for="country">Pays</label>
-                            <input type="text" class="form-control" id="country" placeholder="" required
+                            <input id="country" type="text" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label for="town">Commune</label>
-                            <input type="text" class="form-control" id="town" placeholder="" required
+                            <input id="town" type="text" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label for="zip">Code Postal</label>
-                            <input type="number" class="form-control" id="zip" placeholder="" required
+                            <input id="zip" type="number" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
                     </div>
@@ -89,25 +91,25 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="product">Nom du produit/service</label>
-                            <input type="text" class="form-control" id="product" placeholder="" required
+                            <input id="product" type="text" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label for="price">Prix</label>
-                            <input type="number" class="form-control" id="price" placeholder="" required
+                            <input id="price" type="number" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label for="quantity">Quantité</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="" required
+                            <input id="quantity" type="number" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label for="tva">TVA</label>
-                            <input type="number" class="form-control" id="tva" placeholder="" required
+                            <input id="tva" type="number" class="form-control" placeholder="" required
                                 autoComplete="nope">
                         </div>
                     </div>
@@ -130,17 +132,24 @@
             </div>
             <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-secondary" id="print"></button>
-                <button type="button" class="btn btn-warning" id="reload">Créer un nouveau document</button>
+                <button type="button" class="btn btn-warning" id="reload">
+                    Créer un nouveau document
+                </button>
             </div>
         </div>
 
         <div class="col-12 mt-5 mb-5 text-center">
-            <button type="button" class="btn btn-warning" id="stored-invoices">Afficher les factures</button>
-            <button type="button" class="btn btn-warning" id="stored-estimates">Afficher les devis</button>
+            <button type="button" class="btn btn-warning" id="stored-invoices">
+                Afficher les factures
+            </button>
+            <button type="button" class="btn btn-warning" id="stored-estimates">
+                Afficher les devis
+            </button>
             <div id="stored-data" class="card mt-5"></div>
         </div>
 
     </div>
+
     <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2023 Alex</p>
         <ul class="list-inline">
@@ -153,8 +162,7 @@
             <li class="list-inline-item"><a href="https://github.com/SANIOK78" target="_blank">GitHub</a></li>
         </ul>
     </footer>
-    </div>
-
+    
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -166,7 +174,8 @@
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
         crossorigin="anonymous"></script>
 
-    <!-- <script type="module" src="script.js"></script> -->
+    <script type="module" src="script.js"></script>
+
 </body>
 
 </html>
