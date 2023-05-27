@@ -23,8 +23,8 @@ export class Storage implements HasSetItem {
         }
     }
 
-    // métode en mode "public" qui va injecter le Document généré dans 
-    // LocalStorage
+    // métode qui va injecter le Document généré dans LocalStorage
+
     setItem(typeVal: string, htmlString: string): void {
 
         // 1. Vérification si le Tableau existe
@@ -43,8 +43,3 @@ export class Storage implements HasSetItem {
         }
     }
 }
-/**
- * "typeVal:" => c'est soit la "Facture" soit le "Devis"
- * "htmlString: " => le code HTML du document a transformer en
- * "string" et l'injecter dans "localStorage"
- */

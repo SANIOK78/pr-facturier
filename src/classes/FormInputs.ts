@@ -27,6 +27,9 @@ export class FormInput {
     hiddenDiv: HTMLDivElement;
     btnPrint: HTMLButtonElement;
     btnReload: HTMLButtonElement;
+    storedInvoices: HTMLButtonElement;
+    storedEstimates: HTMLButtonElement;
+    storedEl: HTMLDivElement;
 
     constructor() {
         this.form = document.getElementById('form') as HTMLFormElement;
@@ -42,25 +45,31 @@ export class FormInput {
         this.quantity = document.getElementById('quantity') as HTMLInputElement;
         this.tva = document.getElementById('tva') as HTMLInputElement;
 
-        // Recup e elemDOM ou on va afficher le formulaire
-        this.docContainer = document.getElementById('document-container') as HTMLDivElement
+        // Recup e element du DOM ou on va afficher le formulaire
+        this.docContainer = document.getElementById('document-container') as HTMLDivElement;
         this.hiddenDiv = document.getElementById('hiddenDiv') as HTMLDivElement;
-
         this.btnPrint = document.getElementById('print') as HTMLButtonElement;
+
+        // Recup de la <div id="stored-data" > ou on va aficher le doc recup dan LocalStorage
+        this.storedEl = document.getElementById('stored-data') as HTMLDivElement;
 
         // Recup du button reload
         this.btnReload = document.getElementById('reload') as HTMLButtonElement;
+        // Recup du button "AffichFacture"
+        this.storedInvoices = document.getElementById('stored-invoices') as HTMLButtonElement;
+        // Recup du button "AffichDevis"
+        this.storedEstimates = document.getElementById('stored-estimates') as HTMLButtonElement;
+
 
         // Pour lancer les Listeners
         this.submitFormListener();
-
-        // écoute le click sur les boutons:  arguments :"btn 'imprimer'" et
-        //  la div ou on injecte la facture ou le Devis. On va recuperer
-        // cette "div" pour pouvoir imprimer la facture ou devis
+        // pour pouvoir imprimer la facture ou devis
         this.printListener(this.btnPrint, this.docContainer);
-
         // Méthode qui au click sur btn va recharger la page
         this.deleteListener(this.btnReload);
+
+        // Listener qui va chercher un doc dans "localStorage"
+        this.getStoredDocsListener();
     }
 
     // Listeners (on utilise une méthode en mode private)
@@ -90,6 +99,58 @@ export class FormInput {
             // On va scroller toute en haut de la page
             window.scrollTo(0, 0);
         } )
+    }
+
+    // Méthode qui va chercher un doc dans "localStorage"
+    private getStoredDocsListener(): void {
+        // pour les "Factures"
+        this.storedInvoices.addEventListener("click", this.getItems.bind(this, "invoice"));
+        // pour les "Devis"
+        this.storedEstimates.addEventListener("click", this.getItems.bind(this, "estimate"));
+    };
+
+    // Méthode qui va verifier le LocalStorage,
+    private getItems(docType: string) {
+ 
+        if(this.storedEl.hasChildNodes() ) {   
+            // on va vider tous ce que se trouve
+            this.storedEl.innerHTML = "";
+        }
+        
+        // 2. On verifie ce qu'on a dans LocalStorage par rapport a ce "docType"
+        // "invoice" ou "estimte"
+        if(localStorage.getItem(docType)) {    //si c'est "true"
+            let array: string | null;        //type de la variable
+            array = localStorage.getItem(docType);  //on va l'associer a cette variable
+
+            // 2.1 Ne sachant pas dans qel cas on est, on va faire une autre verification
+            if( array !==null && array.length > 2) {  //ca veut dire qu'on a des valeur dans []
+                let arrayData: string[];   //type de la variable
+                arrayData = JSON.parse(array);  //on y met ce qu'on a trouvé
+
+                arrayData.map((doc: string): void => {
+                    // création des elements "div"
+                    let card: HTMLDivElement = document.createElement('div');
+                    let cardBody: HTMLDivElement = document.createElement('div');
+
+                    // on applique les "class"
+                    let cardClasses: Array<string> = ['card', 'mt-5'];
+                    let cardBodyClasses: string = 'card-body';
+                    // on applique les class au éléments
+                    card.classList.add(...cardClasses); 
+                    cardBody.classList.add(cardBodyClasses); 
+
+                    // Insertions des valeurs recupéré dans la DOM
+                    cardBody.innerHTML = doc;
+                    card.append(cardBody);
+
+                    // ensuite on les passe dans la div ou on veut les afficher
+                    this.storedEl.append(card)
+                })
+            } else {
+                this.storedEl.innerHTML = '<div class="p-5">Aucune data disponible </div>'
+            }
+        }
     }
 
 

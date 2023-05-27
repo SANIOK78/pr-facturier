@@ -15,8 +15,7 @@ export class Storage {
             localStorage.setItem('estimate', '[]');
         }
     }
-    // métode en mode "public" qui va injecter le Document généré dans 
-    // LocalStorage
+    // métode qui va injecter le Document généré dans LocalStorage
     setItem(typeVal, htmlString) {
         // 1. Vérification si le Tableau existe
         let array;
@@ -34,8 +33,3 @@ export class Storage {
         }
     }
 }
-/**
- * "typeVal:" => c'est soit la "Facture" soit le "Devis"
- * "htmlString: " => le code HTML du document a transformer en
- * "string" et l'injecter dans "localStorage"
- */ 

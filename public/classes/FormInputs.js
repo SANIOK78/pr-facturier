@@ -17,20 +17,26 @@ export class FormInput {
         this.price = document.getElementById('price');
         this.quantity = document.getElementById('quantity');
         this.tva = document.getElementById('tva');
-        // Recup e elemDOM ou on va afficher le formulaire
+        // Recup e element du DOM ou on va afficher le formulaire
         this.docContainer = document.getElementById('document-container');
         this.hiddenDiv = document.getElementById('hiddenDiv');
         this.btnPrint = document.getElementById('print');
+        // Recup de la <div id="stored-data" > ou on va aficher le doc recup dan LocalStorage
+        this.storedEl = document.getElementById('stored-data');
         // Recup du button reload
         this.btnReload = document.getElementById('reload');
+        // Recup du button "AffichFacture"
+        this.storedInvoices = document.getElementById('stored-invoices');
+        // Recup du button "AffichDevis"
+        this.storedEstimates = document.getElementById('stored-estimates');
         // Pour lancer les Listeners
         this.submitFormListener();
-        // écoute le click sur les boutons:  arguments :"btn 'imprimer'" et
-        //  la div ou on injecte la facture ou le Devis. On va recuperer
-        // cette "div" pour pouvoir imprimer la facture ou devis
+        // pour pouvoir imprimer la facture ou devis
         this.printListener(this.btnPrint, this.docContainer);
         // Méthode qui au click sur btn va recharger la page
         this.deleteListener(this.btnReload);
+        // Listener qui va chercher un doc dans "localStorage"
+        this.getStoredDocsListener();
     }
     // Listeners (on utilise une méthode en mode private)
     submitFormListener() {
@@ -54,6 +60,51 @@ export class FormInput {
             // On va scroller toute en haut de la page
             window.scrollTo(0, 0);
         });
+    }
+    // Méthode qui va chercher un doc dans "localStorage"
+    getStoredDocsListener() {
+        // pour les "Factures"
+        this.storedInvoices.addEventListener("click", this.getItems.bind(this, "invoice"));
+        // pour les "Devis"
+        this.storedEstimates.addEventListener("click", this.getItems.bind(this, "estimate"));
+    }
+    ;
+    // Méthode qui va verifier le LocalStorage,
+    getItems(docType) {
+        if (this.storedEl.hasChildNodes()) {
+            // on va vider tous ce que se trouve
+            this.storedEl.innerHTML = "";
+        }
+        // 2. On verifie ce qu'on a dans LocalStorage par rapport a ce "docType"
+        // "invoice" ou "estimte"
+        if (localStorage.getItem(docType)) { //si c'est "true"
+            let array; //type de la variable
+            array = localStorage.getItem(docType); //on va l'associer a cette variable
+            // 2.1 Ne sachant pas dans qel cas on est, on va faire une autre verification
+            if (array !== null && array.length > 2) { //ca veut dire qu'on a des valeur dans []
+                let arrayData; //type de la variable
+                arrayData = JSON.parse(array); //on y met ce qu'on a trouvé
+                arrayData.map((doc) => {
+                    // création des elements "div"
+                    let card = document.createElement('div');
+                    let cardBody = document.createElement('div');
+                    // on applique les "class"
+                    let cardClasses = ['card', 'mt-5'];
+                    let cardBodyClasses = 'card-body';
+                    // on applique les class au éléments
+                    card.classList.add(...cardClasses);
+                    cardBody.classList.add(cardBodyClasses);
+                    // Insertions des valeurs recupéré dans la DOM
+                    cardBody.innerHTML = doc;
+                    card.append(cardBody);
+                    // ensuite on les passe dans la div ou on veut les afficher
+                    this.storedEl.append(card);
+                });
+            }
+            else {
+                this.storedEl.innerHTML = '<div class="p-5">Aucune data disponible </div>';
+            }
+        }
     }
     // Méthode pour soummetre le formulaire
     handleFormSubmit(e) {

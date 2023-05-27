@@ -7,7 +7,7 @@ export class Print {
     }
     print() {
         // on remplace le contenu de "body" par le contenu de ce
-        // qu'il y a dans le "el.HTML"
+        // qu'il y a dans "el.HTML"
         document.body.innerHTML = this.el.innerHTML;
         // méthode 'Print' de l'objet Window va imprimer toute 
         // la page et du coup vu qu'on a remplacé le contenu de 
