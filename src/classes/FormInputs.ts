@@ -4,6 +4,8 @@ import { HasHtmlFormat } from "../interfaces/HasHtmlFormat.js";
 import { Datas } from "../classes/Datas.js"
 import { HasRender } from "../interfaces/HasRender.js";
 import { Display } from "./Display.js";
+import { HasPrint } from "../interfaces/HasPrint.js";
+import { Print } from "./Print.js";
 
 // Définition de la class a instancier
 export class FormInput {
@@ -21,8 +23,10 @@ export class FormInput {
     price: HTMLInputElement;
     quantity: HTMLInputElement;
     tva: HTMLInputElement;
-    docContainer: HTMLDivElement;
-    hiddenDiv: HTMLDivElement
+    docContainer: HTMLDivElement;  //la div ou on inject la facture ou le devis
+    hiddenDiv: HTMLDivElement;
+    btnPrint: HTMLButtonElement;
+    btnReload: HTMLButtonElement;
 
     constructor() {
         this.form = document.getElementById('form') as HTMLFormElement;
@@ -40,16 +44,54 @@ export class FormInput {
 
         // Recup e elemDOM ou on va afficher le formulaire
         this.docContainer = document.getElementById('document-container') as HTMLDivElement
-        this.hiddenDiv = document.getElementById('hiddenDiv') as HTMLDivElement
+        this.hiddenDiv = document.getElementById('hiddenDiv') as HTMLDivElement;
 
-        // Pour lancer le Listener
-        this.submitFormListener()
+        this.btnPrint = document.getElementById('print') as HTMLButtonElement;
+
+        // Recup du button reload
+        this.btnReload = document.getElementById('reload') as HTMLButtonElement;
+
+        // Pour lancer les Listeners
+        this.submitFormListener();
+
+        // écoute le click sur les boutons:  arguments :"btn 'imprimer'" et
+        //  la div ou on injecte la facture ou le Devis. On va recuperer
+        // cette "div" pour pouvoir imprimer la facture ou devis
+        this.printListener(this.btnPrint, this.docContainer);
+
+        // Méthode qui au click sur btn va recharger la page
+        this.deleteListener(this.btnReload);
     }
 
     // Listeners (on utilise une méthode en mode private)
     private submitFormListener(): void {
         this.form.addEventListener("submit", this.handleFormSubmit.bind(this) )
     }
+
+    // "printListener()"
+    private printListener(btn: HTMLButtonElement, docContainer: HTMLDivElement) {
+
+        // gestion de l'evenement 'onClick'
+        btn.addEventListener("click", () => {
+            let availableDoc: HasPrint;
+
+            // On va instancer la class "Print"
+            availableDoc = new Print(docContainer);
+            availableDoc.print();
+        })
+    }
+
+    // deleteListener(this.btnReload)
+    private deleteListener(btn: HTMLButtonElement) {
+
+        btn.addEventListener('click', () => {
+            // on recharge la page
+            document.location.reload();
+            // On va scroller toute en haut de la page
+            window.scrollTo(0, 0);
+        } )
+    }
+
 
     // Méthode pour soummetre le formulaire
     private handleFormSubmit(e: Event) {
@@ -72,7 +114,7 @@ export class FormInput {
 
             // Instance de l'inerface "HasRender"
             let template: HasRender;  //type de variable
-            template = new Display(this.docContainer, this.hiddenDiv);
+            template = new Display(this.docContainer, this.hiddenDiv, this.btnPrint);
 
             template.render(docData, type);
         }

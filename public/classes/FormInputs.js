@@ -1,6 +1,7 @@
 // import de la class "Datas" pour créer un instance
 import { Datas } from "../classes/Datas.js";
 import { Display } from "./Display.js";
+import { Print } from "./Print.js";
 // Définition de la class a instancier
 export class FormInput {
     constructor() {
@@ -19,12 +20,40 @@ export class FormInput {
         // Recup e elemDOM ou on va afficher le formulaire
         this.docContainer = document.getElementById('document-container');
         this.hiddenDiv = document.getElementById('hiddenDiv');
-        // Pour lancer le Listener
+        this.btnPrint = document.getElementById('print');
+        // Recup du button reload
+        this.btnReload = document.getElementById('reload');
+        // Pour lancer les Listeners
         this.submitFormListener();
+        // écoute le click sur les boutons:  arguments :"btn 'imprimer'" et
+        //  la div ou on injecte la facture ou le Devis. On va recuperer
+        // cette "div" pour pouvoir imprimer la facture ou devis
+        this.printListener(this.btnPrint, this.docContainer);
+        // Méthode qui au click sur btn va recharger la page
+        this.deleteListener(this.btnReload);
     }
     // Listeners (on utilise une méthode en mode private)
     submitFormListener() {
         this.form.addEventListener("submit", this.handleFormSubmit.bind(this));
+    }
+    // "printListener()"
+    printListener(btn, docContainer) {
+        // gestion de l'evenement 'onClick'
+        btn.addEventListener("click", () => {
+            let availableDoc;
+            // On va instancer la class "Print"
+            availableDoc = new Print(docContainer);
+            availableDoc.print();
+        });
+    }
+    // deleteListener(this.btnReload)
+    deleteListener(btn) {
+        btn.addEventListener('click', () => {
+            // on recharge la page
+            document.location.reload();
+            // On va scroller toute en haut de la page
+            window.scrollTo(0, 0);
+        });
     }
     // Méthode pour soummetre le formulaire
     handleFormSubmit(e) {
@@ -43,7 +72,7 @@ export class FormInput {
             docData = new Datas(type, firstName, lastName, address, country, town, zip, product, price, quantity, tva, date);
             // Instance de l'inerface "HasRender"
             let template; //type de variable
-            template = new Display(this.docContainer, this.hiddenDiv);
+            template = new Display(this.docContainer, this.hiddenDiv, this.btnPrint);
             template.render(docData, type);
         }
     }

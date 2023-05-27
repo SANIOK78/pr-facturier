@@ -1,14 +1,19 @@
 import { HasHtmlFormat } from "../interfaces/HasHtmlFormat";
 import { HasRender } from "../interfaces/HasRender.js";
+import { Storage } from "./Storage.js";
 
 export class Display implements HasRender {
 
     formContainer: HTMLDivElement;
 
     // Recup du elementHTML ou on va afficher cette facture
-    constructor(private container: HTMLDivElement, private hiddenDiv: HTMLDivElement ) {
+    constructor(
+        private container: HTMLDivElement,
+        private hiddenDiv: HTMLDivElement,
+        private btnPrint: HTMLButtonElement,
 
-        this.formContainer = document.getElementById("form-container") as HTMLDivElement;
+    ) {
+        this.formContainer = document.getElementById("form-container")as HTMLDivElement;
         document.getElementById("document-container")
     }
 
@@ -17,8 +22,17 @@ export class Display implements HasRender {
 
         const htmlString: string = docObject.htmlFormat();
 
-        // On inject le template au niveau de container
+        // On inject le Html au niveau de container
         this.container.innerHTML = htmlString; 
+
+        // On va instancier la class "Storage"
+        new Storage(docType, htmlString)
+
+        if(docType === 'invoice') {
+            this.btnPrint.innerText = "Imprimer la Facture"
+        } else {
+            this.btnPrint.innerText = "Imprimer le Devis"
+        }
 
         // On va retirer la class 'invisible' pour pouvoir afficher le document
         this.hiddenDiv.classList.remove('invisible');
